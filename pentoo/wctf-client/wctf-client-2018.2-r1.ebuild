@@ -13,6 +13,8 @@ KEYWORDS="amd64"
 IUSE=""
 S="${WORKDIR}"
 
+DEPEND="!pentoo/pentoo-system"
+
 PDEPEND="dev-vcs/git
 		net-misc/dhcpcd
 		sys-apps/rng-tools
@@ -30,13 +32,21 @@ PDEPEND="dev-vcs/git
 		app-admin/sudo
 		net-wireless/wpa_supplicant
 		net-wireless/aircrack-ng
-		net-wireless/rfkill
+		>=sys-apps/util-linux-2.31_rc1
 		net-wireless/kismet
 		app-portage/gentoolkit
 		app-portage/smart-live-rebuild
 		|| ( net-misc/iputils[arping(+)] net-analyzer/arping )"
 
 src_install() {
+	#/usr/share/pentoo
+	insinto /usr/share/pentoo
+	doins "${FILESDIR}/pentoo-keyring.asc"
+
+	#/etc/portage/repos.conf
+	insinto /etc/portage/repos.conf
+	doins "${FILESDIR}/pentoo.conf"
+
 	insinto /etc/local.d
 	doexe "${FILESDIR}"/99-ldm.start
 }
